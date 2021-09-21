@@ -1,8 +1,16 @@
 "use strict";
 
-const numberOfFilms = +prompt("Сколько фильмов вы уже посмотрели?", "");
+let numberOfFilms;
 
+function start() {
+    numberOfFilms = +prompt("Сколько фильмов вы уже посмотрели?", "");
 
+    while (numberOfFilms == '' || numberOfFilms == null || isNaN(numberOfFilms)) {     // здесь говорится если в переменную numberOfFilms будет введена пустая строка или отмена или не число isNaN(а в скобках указываем переменную с которой работаем), то мы в этом цикле повторим вопрос что ниже на одну строку
+        numberOfFilms = +prompt("Сколько фильмов вы уже посмотрели?", "");
+    }
+}
+
+start();
 
 const personalMovieDB = {
     count: numberOfFilms,
@@ -12,12 +20,57 @@ const personalMovieDB = {
     privat: false
 };
 
-const a = prompt("Один из последних просмотренных фильмов?", ""),
-      b = prompt('На сколько оцените его?', ''),
-      c = prompt("Один из последних просмотренных фильмов?", ""),
-      d = prompt('На сколько оцените его?', '');
+// const a = prompt("Один из последних просмотренных фильмов?", ""),
+//       b = prompt('На сколько оцените его?', ''),
+//       c = prompt("Один из последних просмотренных фильмов?", ""),
+//       d = prompt('На сколько оцените его?', '');
 
-personalMovieDB.movies[a] = b;
-personalMovieDB.movies[c] = d;
+// personalMovieDB.movies[a] = b;
+// personalMovieDB.movies[c] = d;
 
-console.log(personalMovieDB);
+function rememberMyFilms() {
+    for (let i = 0; i < 2; i++) {           // при помощи цикла мы говорим задай вопросы два раза пользователю, это получается что i = 0 начальное значение и i < 2 тоесть выполняй действия пока ай будет меньше двух соответственно ай увеличиваем на единицу при помощи инкремента
+        const a = prompt("Один из последних просмотренных фильмов?", ""),
+              b = prompt('На сколько оцените его?', '');
+    
+        if (a != null && b != null && a != '' && b != '' && a.length < 50) {     // тут мы указываем что переменные a и b не равно null(то есть не отмена) не пустые строки и длина меньше 50 символов то выполняем условие, мы записываем свойство значение что указано ниже на 28 строке
+            personalMovieDB.movies[a] = b;     // здесь у нас записываются ответы в виде свойство значение, где а это свойство а b это значение
+            console.log('done');
+        } else {                        // значит если условие что выше не выполнилось тогда мы в консоль лог выводим error и возвращаемся на одну интерацию назад при помощи дикремента чтобы снова задать пользователю вопрос
+            console.log('error');
+            i--;
+        }    
+    }
+}
+
+rememberMyFilms();
+
+function detectPersonalLevel() {
+    if (personalMovieDB.count < 10) {
+        console.log("Просмотрено довольно мало фильмов");
+    } else if (personalMovieDB.count >= 10 && personalMovieDB.count < 30) {
+        console.log("Вы классический зритель");
+    } else if (personalMovieDB.count >= 30) {
+        console.log("Вы киноман");
+    } else {
+        console.log("Произошла ошибка");
+    }
+}
+
+detectPersonalLevel();
+
+function showMyDB(hidden) {
+    if (!hidden) {                      // здесь говорится если наша база данных personalMovieDB не скрыта то мы её показываем
+        console.log(personalMovieDB);   // получается что privat у нас false, она передается в 63 строку и false превращается в true и тогда выводится наша база данных
+    }
+}
+
+showMyDB(personalMovieDB.privat);
+
+function writeYourGenres() {
+    for (let i = 1; i <= 3; i++) {     // здесь мы итератору задаем начальное значение 1 так как пользователь не знает что в программировании все начинается с нуля
+        personalMovieDB.genres[i - 1] = prompt(`Ваш любимый жанр под номером ${i}`);  // мы задаем вопрос три раза пользователю вопрос задаем в бэктиках для того чтобы поставить итератор (чтобы пользователю задали вопрос три раза)    // тут указываем итератор -1 чтобы в нашу базу данных записывалось все с нуля, а если мы не укажем минус 1 то у нас получиться четыре жанра первый из которых будет всегда пустой. Далее во внутрь присваиваем все что лежит в переменной genre.
+    }
+}
+
+writeYourGenres();
